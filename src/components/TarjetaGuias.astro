@@ -1,0 +1,25 @@
+---
+const { title, description, link, borderColor, textColor, hoverTextColor, gradientFrom, gradientTo, icon } = Astro.props;
+import { useTranslations } from "../i18n/utils";
+const currentLang: "es" | "en" = (Astro.currentLocale as "es" | "en") || "es";
+const translateLabels = useTranslations(currentLang);
+---
+
+<div class={`group bg-white dark:bg-[#2A2A2A] p-8 rounded-xl shadow-xl hover:shadow-2xl transition-all duration-300 transform hover:-translate-y-2`}>
+  <div class={`border-l-4 ${borderColor} pl-6`}>
+    <h2 class="text-2xl font-bold mb-4">
+      <span class={`bg-clip-text text-transparent bg-gradient-to-r ${gradientFrom} ${gradientTo}`}>
+        {icon} {translateLabels(title)}
+      </span>
+    </h2>
+    <p class="text-sm text-gray-600 dark:text-gray-300 mb-6">
+      {translateLabels(description)}
+    </p>
+    <a href={link} target="_blank" rel="noopener noreferrer" class={`inline-flex items-center ${textColor} ${hoverTextColor} font-medium`}>
+      {translateLabels("guides.view_more")}
+      <svg class="w-5 h-5 ml-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17 8l4 4m0 0l-4 4m4-4H3"></path>
+      </svg>
+    </a>
+  </div>
+</div>

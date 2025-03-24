@@ -1,0 +1,285 @@
+---
+import { getRelativeLocaleUrl } from "astro:i18n";
+import { languageList } from "../i18n/ui";
+import { useTranslations } from "../i18n/utils";
+
+const getPathWithoutLocale = (path: string) => {
+  const segments = path.split("/").filter(Boolean);
+  return segments.slice(1).join("/") || "/";
+};
+
+const currentPathWithoutLocale = getPathWithoutLocale(Astro.url.pathname);
+const currentLang = Astro.currentLocale || "es";
+const translateLabels = useTranslations(currentLang as keyof typeof languageList);
+
+// Constantes para clases comunes en enlaces
+const desktopLinkClasses =
+  "flex items-center px-3 py-2 text-sm font-medium rounded-lg transition-all duration-300 hover:bg-white/5 group dark:text-white";
+const mobileLinkClasses =
+  "flex items-center px-3 py-2 text-sm font-medium rounded-lg transition-all duration-300 hover:bg-white/5 group text-white";
+
+// Definición de los enlaces de navegación, con los íconos como cadenas HTML
+const navLinks = [
+  {
+    href: getRelativeLocaleUrl(currentLang, "/"),
+    label: translateLabels("nav.home"),
+    icon: `<svg class="w-5 h-5 mr-2 text-[#FF6F61] opacity-70 group-hover:opacity-100 dark:text-[#FF6F61]" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3 12l2-2m0 0l7-7 7 7M5 10v10a1 1 0 001 1h3m10-11l2 2m-2-2v10a1 1 0 01-1 1h-3m-6 0a1 1 0 001-1v-4a1 1 0 011-1h2a1 1 0 011 1v4a1 1 0 001 1m-6 0h6"></path>
+          </svg>`,
+    desktopHoverText: "hover:text-[#FF6F61] dark:hover:text-[#FF6F61]",
+    mobileHoverText: "hover:text-[#FF6F61]"
+  },
+  {
+    href: getRelativeLocaleUrl(currentLang, "guias"),
+    label: translateLabels("nav.guides"),
+    icon: `<svg class="w-5 h-5 mr-2 text-[#6B5B95] opacity-70 group-hover:opacity-100 dark:text-[#6B5B95]" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5H7a2 2 0 00-2 2v12a2 2 0 002 2h10a2 2 0 003-2V7a2 2 0 00-2-2h-2M9 5a2 2 0 002 2h2a2 2 0 002-2M9 5a2 2 0 012-2h2a2 2 0 012 2"></path>
+          </svg>`,
+    desktopHoverText: "hover:text-[#6B5B95] dark:hover:text-[#6B5B95]",
+    mobileHoverText: "hover:text-[#6B5B95]"
+  },
+  {
+  href: getRelativeLocaleUrl(currentLang, "herramientas"),
+  label: translateLabels("nav.tools"),
+  icon: `<svg xmlns="http://www.w3.org/2000/svg" class="w-5 h-5 mr-2 text-[#4CAF50] opacity-70 group-hover:opacity-100 dark:text-[#4CAF50]" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+           <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M11.049 2.927c.3-.921 1.603-.921 1.902 0l.637 1.958a1.724 1.724 0 001.616 1.196h2.045c.969 0 1.371 1.24.588 1.81l-1.657 1.2a1.724 1.724 0 000 2.936l1.657 1.2c.783.57.38 1.81-.588 1.81h-2.045a1.724 1.724 0 00-1.616 1.196l-.637 1.958c-.3.921-1.603.921-1.902 0l-.637-1.958a1.724 1.724 0 00-1.616-1.196H6.807c-.969 0-1.371-1.24-.588-1.81l1.657-1.2a1.724 1.724 0 000-2.936l-1.657-1.2c-.783-.57-.38-1.81.588-1.81h2.045a1.724 1.724 0 001.616-1.196l.637-1.958z" />
+         </svg>`,
+  desktopHoverText: "hover:text-[#4CAF50] dark:hover:text-[#4CAF50]",
+  mobileHoverText: "hover:text-[#4CAF50]"
+},
+{
+  href: getRelativeLocaleUrl(currentLang, "descargas"),
+  label: translateLabels("nav.download"),
+  icon: `<svg class="w-5 h-5 mr-2 text-[#FFD700] opacity-70 group-hover:opacity-100 dark:text-[#FFD700]" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+           <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 16v1a3 3 0 003 3h10a3 3 0 003-3v-1m-4-4l-4 4m0 0l-4-4m4 4V4"></path>
+         </svg>`,
+  desktopHoverText: "hover:text-[#FFD700] dark:hover:text-[#FFD700]",
+  mobileHoverText: "hover:text-[#FFD700]"
+}
+];
+---
+
+<header
+  class="bg-gradient-to-br from-[#ffffff] to-[#f5f5f5] dark:from-[#1A1A1A] dark:to-[#2d2d2d] border-b border-white/10 backdrop-blur-sm fixed w-full top-0 z-50 animate-slideInRight"
+>
+  <div class="container mx-auto flex justify-between items-center px-4 py-3">
+    <!-- Logo -->
+    <a
+      href={getRelativeLocaleUrl(currentLang, "/")}
+      class="flex items-center space-x-2 group"
+    >
+      <span
+        class="text-xl font-bold bg-clip-text text-transparent bg-gradient-to-r from-[#FF6F61] to-[#6B5B95] group-hover:bg-gradient-to-r group-hover:from-[#FF8C78] group-hover:to-[#8B7CB0] transition-all duration-300 animate-shake"
+      >
+        CodeXtremeOS
+      </span>
+    </a>
+
+    <nav class="flex items-center space-x-6">
+      <!-- Menú Desktop -->
+      <ul class="hidden md:flex space-x-6">
+        {navLinks.map((link) => (
+          <li>
+            <a
+              href={link.href}
+              class={`${desktopLinkClasses} ${link.desktopHoverText} animate-linkElectric`}
+            >
+              <span set:html={link.icon}></span>
+              {link.label}
+            </a>
+          </li>
+        ))}
+      </ul>
+
+      <!-- Botón Hamburguesa (Mobile) -->
+      <button
+        id="mobile-menu-button"
+        class="md:hidden p-2 rounded-lg hover:bg-white/5 transition-colors duration-300"
+        aria-label="Abrir menú"
+      >
+        <svg
+          class="w-6 h-6 text-gray-600 dark:text-gray-300"
+          fill="none"
+          stroke="currentColor"
+          viewBox="0 0 24 24"
+        >
+          <path
+            stroke-linecap="round"
+            stroke-linejoin="round"
+            stroke-width="2"
+            d="M4 6h16M4 12h16M4 18h16"
+          ></path>
+        </svg>
+      </button>
+
+      <!-- Botón de Idioma -->
+      <div class="relative group">
+        <button
+          class="p-2 rounded-lg bg-gradient-to-br from-[#FF6F61] to-[#6B5B95] hover:from-[#FF8C78] hover:to-[#8B7CB0] transition-all duration-300 flex items-center shadow-md hover:shadow-lg"
+          aria-label="Cambiar idioma"
+        >
+          <span class="text-sm font-medium uppercase text-white">
+            {currentLang}
+          </span>
+        </button>
+
+        <!-- Dropdown de Idiomas -->
+        <div
+          class="absolute right-0 top-full mt-2 w-32 bg-white dark:bg-[#1A1A1A] rounded-lg shadow-lg opacity-0 invisible group-hover:opacity-100 group-hover:visible transition-all duration-200 border border-white/10"
+        >
+          <ul class="py-2">
+            {Object.entries(languageList).map(([langCode, langName]) =>
+              currentLang !== langCode && (
+                <li>
+                  <a
+                    href={getRelativeLocaleUrl(
+                      langCode as any,
+                      currentPathWithoutLocale
+                    )}
+                    class="block px-4 py-2 text-sm hover:bg-white/5 dark:hover:bg-white/10 transition-colors dark:text-white"
+                  >
+                    {langName}
+                  </a>
+                </li>
+              )
+            )}
+          </ul>
+        </div>
+      </div>
+
+      <!-- Botón de Tema -->
+      <button
+        id="theme-toggle"
+        class="p-2 rounded-lg bg-gradient-to-br from-[#FF6F61] to-[#6B5B95] hover:from-[#FF8C78] hover:to-[#8B7CB0] transition-all duration-300 relative group shadow-md hover:shadow-lg"
+        aria-label="Cambiar tema"
+      >
+        <div class="flex items-center justify-center w-6 h-6">
+          <span
+            id="theme-icon"
+            class="text-lg transition-transform duration-300"
+          >🌙</span>
+        </div>
+        <span
+          class="absolute -top-8 left-1/2 -translate-x-1/2 bg-gray-800 text-white text-xs px-2 py-1 rounded-md opacity-0 group-hover:opacity-100 transition-opacity duration-200 shadow-md"
+        >
+          {translateLabels("theme.toggle")}
+        </span>
+      </button>
+    </nav>
+  </div>
+
+  <!-- Menú Móvil -->
+  <div
+    id="mobile-menu"
+    class="hidden md:hidden fixed top-16 left-0 w-full bg-inherit border-b border-white/10 backdrop-blur-sm shadow-lg animate-slideInRight"
+  >
+    <div class="container mx-auto px-4 py-4">
+      <ul class="flex flex-row flex-wrap gap-4 justify-center">
+        {navLinks.map((link) => (
+          <li>
+            <a
+              href={link.href}
+              class={`${mobileLinkClasses} ${link.mobileHoverText}`}
+            >
+              <span set:html={link.icon}></span>
+              {link.label}
+            </a>
+          </li>
+        ))}
+      </ul>
+    </div>
+  </div>
+</header>
+
+<script is:inline>
+// Script del Tema
+const themeToggle = document.getElementById("theme-toggle");
+const themeIcon = document.getElementById("theme-icon");
+const htmlElement = document.documentElement;
+
+const toggleTheme = () => {
+  htmlElement.classList.toggle("dark");
+  const isDarkMode = htmlElement.classList.contains("dark");
+  themeIcon.textContent = isDarkMode ? "☀️" : "🌙";
+  themeIcon.classList.add("rotate-[360deg]");
+  setTimeout(() => themeIcon.classList.remove("rotate-[360deg]"), 500);
+  localStorage.setItem("theme", isDarkMode ? "dark" : "light");
+};
+
+// Cargar tema
+const savedTheme = localStorage.getItem("theme");
+if (savedTheme === "light") {
+  htmlElement.classList.remove("dark");
+  themeIcon.textContent = "🌙";
+} else {
+  htmlElement.classList.add("dark");
+  themeIcon.textContent = "☀️";
+}
+
+themeToggle.addEventListener("click", toggleTheme);
+
+// Script del Menú Móvil
+const mobileMenuButton = document.getElementById("mobile-menu-button");
+const mobileMenu = document.getElementById("mobile-menu");
+
+const toggleMenu = () => {
+  mobileMenu.classList.toggle("hidden");
+  mobileMenu.classList.toggle("animate-slideInRight");
+};
+
+mobileMenuButton.addEventListener("click", (e) => {
+  e.stopPropagation();
+  toggleMenu();
+});
+
+// Delegación de eventos para cerrar el menú móvil al hacer click fuera
+document.addEventListener("click", (e) => {
+  if (!mobileMenu.contains(e.target) && !mobileMenuButton.contains(e.target)) {
+    mobileMenu.classList.add("hidden");
+    mobileMenu.classList.remove("animate-slideInRight");
+  }
+});
+
+// Cerrar menú al cambiar tamaño de pantalla
+window.addEventListener("resize", () => {
+  if (window.innerWidth >= 768) {
+    mobileMenu.classList.add("hidden");
+  }
+});
+
+// Cerrar menú al seleccionar un ítem
+mobileMenu.querySelectorAll("a").forEach((link) => {
+  link.addEventListener("click", () => {
+    mobileMenu.classList.add("hidden");
+    mobileMenu.classList.remove("animate-slideInRight");
+  });
+});
+</script>
+
+<style>
+  @keyframes slideInRight {
+    from { transform: translateX(100%); opacity: 0; }
+    to { transform: translateX(0); opacity: 1; }
+  }
+  .animate-slideInRight {
+    animation: slideInRight 0.5s ease-out;
+  }
+
+  @keyframes shake {
+    0%, 100% { transform: translateX(0); }
+    25% { transform: translateX(-2px); }
+    50% { transform: translateX(2px); }
+    75% { transform: translateX(-2px); }
+  }
+  .animate-shake {
+    animation: shake 0.5s ease-in-out infinite;
+  }
+
+  @keyframes linkElectric {
+    0%, 100% { text-shadow: 0 0 2px #FF6F61, 0 0 4px #FF6F61; }
+    50% { text-shadow: 0 0 4px #6B5B95, 0 0 8px #6B5B95; }
+  }
+  .animate-linkElectric {
+    animation: linkElectric 2s infinite;
+  }
+</style>
